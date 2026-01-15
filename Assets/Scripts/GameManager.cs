@@ -242,6 +242,8 @@ public class GameManager : MonoBehaviour
     public void DisplayCaptcha(bool x, ButtonManager y)
     {
         captcha.SetActive(x);
+        if(x)
+            PlayerAnswer.ActivateInputField();
         if(y != null)
             currentButton = y;
     }
