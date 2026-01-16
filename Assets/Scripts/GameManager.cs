@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
                 break;
             case 3 :
                 HintSprite.sprite = captchaSprite[3];
-                defineAnswer("guyrys","irystocrats");
+                defineAnswer("guyrys","irystocrat");
                 break;
             case 4:
                 HintSprite.sprite = captchaSprite[4];
