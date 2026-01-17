@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
-public class ClockControler : MonoBehaviour
+public class ClockManager : MonoBehaviour
 {
     static public int CurrentHour;
     static public float CurrentSec;

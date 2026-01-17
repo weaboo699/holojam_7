@@ -23,7 +23,7 @@ public class RoomManager : MonoBehaviour
     
     private List<int> itemsID = new List<int>();
     private int selectedItemIndex = -1;
-    private int selectedSlotIndex = -1; 
+    
     private int[] displaySlots;      
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public static RoomManager Instance { get; private set; }
@@ -66,7 +66,7 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        initItemList();
+        InitializeItemList();
     }
 
     // Update is called once per frame
@@ -74,7 +74,7 @@ public class RoomManager : MonoBehaviour
     {
         
     }
-    void initItemList()
+    void InitializeItemList()
     {
         string itemsString = PlayerPrefs.GetString("SavedItems", "");
 

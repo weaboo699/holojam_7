@@ -635,6 +635,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302180615}
   m_CullTransparentMesh: 1
+--- !u!1 &324215999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 324216000}
+  - component: {fileID: 324216001}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &324216000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324215999}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.3044, y: -2.59026, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1335947614}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &324216001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324215999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2de6c60f7709f42b91ea2d3a666926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DataManager
 --- !u!1 &395652905
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,6 +968,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1215256127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &573557266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 573557267}
+  - component: {fileID: 573557268}
+  m_Layer: 0
+  m_Name: CaptchaManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &573557267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573557266}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.3044, y: -2.59026, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1335947614}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &573557268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573557266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ab6e2544eda4a46bad14a67d9d93e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaptchaManager
+  HintSprite: {fileID: 749779058}
+  captchaSprite:
+  - {fileID: -7263426535359351052, guid: cae1d03b30ac0384ca04c938e0e068f3, type: 3}
+  - {fileID: 4303880830255354845, guid: 35e49ca759335444ab0694711ed85fda, type: 3}
+  - {fileID: -4422861669306358222, guid: 4f01972fb63325a44bc2b2d5fb995803, type: 3}
+  - {fileID: 1230934286571254974, guid: d77c90eccba235d48820014f0831fab9, type: 3}
+  - {fileID: 8329187279161963451, guid: 942b856e7ee03c1488e68e5f30041c34, type: 3}
+  - {fileID: 4440932510733938991, guid: 22a5dcf99f307fb43ad19a188d33880f, type: 3}
+  - {fileID: -1305825661894218240, guid: fa85a11a1eb2b9d4382e010f15062b33, type: 3}
+  - {fileID: -1053585644667220272, guid: 64db87f89e5a8d44a9583b0df0f1e400, type: 3}
+  - {fileID: -4137403696237190310, guid: 5f4e4c817f79a254ea6f9857790d5da2, type: 3}
+  PlayerAnswer: {fileID: 1725476204}
 --- !u!1 &609055343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,22 +1529,12 @@ MonoBehaviour:
   EndScreen: {fileID: 1979831500}
   resultText: {fileID: 1922390537}
   rankText: {fileID: 40372099}
-  captchaSprite:
-  - {fileID: -7263426535359351052, guid: cae1d03b30ac0384ca04c938e0e068f3, type: 3}
-  - {fileID: 4303880830255354845, guid: 35e49ca759335444ab0694711ed85fda, type: 3}
-  - {fileID: -4422861669306358222, guid: 4f01972fb63325a44bc2b2d5fb995803, type: 3}
-  - {fileID: 1230934286571254974, guid: d77c90eccba235d48820014f0831fab9, type: 3}
-  - {fileID: 8329187279161963451, guid: 942b856e7ee03c1488e68e5f30041c34, type: 3}
-  - {fileID: 4440932510733938991, guid: 22a5dcf99f307fb43ad19a188d33880f, type: 3}
-  - {fileID: -1305825661894218240, guid: fa85a11a1eb2b9d4382e010f15062b33, type: 3}
-  - {fileID: -1053585644667220272, guid: 64db87f89e5a8d44a9583b0df0f1e400, type: 3}
-  - {fileID: -4137403696237190310, guid: 5f4e4c817f79a254ea6f9857790d5da2, type: 3}
+  CM: {fileID: 573557268}
+  DM: {fileID: 324216001}
   itemSold: 0
   CurrentIndex: 0
   inventoryIndex: 
   inventoryID: 
-  PlayerAnswer: {fileID: 1725476204}
-  HintSprite: {fileID: 749779058}
 --- !u!4 &769717661
 Transform:
   m_ObjectHideFlags: 0
@@ -2270,6 +2360,8 @@ Transform:
   - {fileID: 1081294965}
   - {fileID: 911376068}
   - {fileID: 2115973323}
+  - {fileID: 573557267}
+  - {fileID: 324216000}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1342207498

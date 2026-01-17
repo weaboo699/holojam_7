@@ -11,16 +11,12 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private int hintValue;
-    private string trueAnswer;
-    private string trueAnswer2 = "wadawdawrfawrf";
-    private ButtonManager currentButton;
     private bool gameEnded = false;
-    private List<ButtonManager> btnObjects = new List<ButtonManager>();
+    private List<ProductItemManager> btnObjects = new List<ProductItemManager>();
 
     [SerializeField]private GameObject btnPrefab;
     [SerializeField]private Transform spawnTransform;
-    [SerializeField]private GameObject captcha;
+    [SerializeField]public GameObject captcha;
     [SerializeField]private int spawnSpacing;
     [SerializeField]private int items;
     [SerializeField]private TMP_Text inventorySlotR0;
@@ -29,15 +25,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]private GameObject EndScreen;
     [SerializeField]private TMP_Text resultText;
     [SerializeField]private TMP_Text rankText;
-    [SerializeField]private Sprite[] captchaSprite;
+    [SerializeField]private CaptchaManager CM;
+    [SerializeField]private DataManager DM;
 
     public int itemSold = 0;
     public int CurrentIndex = 0;
     public int[] inventoryIndex; 
     public int[] inventoryID;
-    public TMP_InputField PlayerAnswer;
-    public Image HintSprite;
-    public static GameManager Instance { get; private set; }
+    public static GameManager Instance { get; set; }
     
     void Awake()
     {
@@ -51,7 +46,7 @@ public class GameManager : MonoBehaviour
         inventoryIndex = new int[3];
         inventoryID = new int[items];
         spawnBlock();
-        changeCaptchaSprite();
+        CM.ChangeCaptchaSprite();
     }
 
     // Update is called once per frame
@@ -66,79 +61,11 @@ public class GameManager : MonoBehaviour
         {
             if (Keyboard.current.enterKey.wasPressedThisFrame)
             {
-                checkValue();
+                CM.CheckValue();
             }
         }
     }
-    void changeCaptchaSprite()
-    {
-        hintValue = UnityEngine.Random.Range(0,8);
-        switch (hintValue)
-        {
-            case 0 :
-                HintSprite.sprite = captchaSprite[0];
-                defineAnswer("chattino","chattini");
-                break;
-            case 1:
-                HintSprite.sprite = captchaSprite[1];
-                defineAnswer("fuwawa","fuwawa abyssgard");
-                break;
-            case 2:
-                HintSprite.sprite = captchaSprite[2];
-                defineAnswer("gigi","gigi murin");
-                break;
-            case 3 :
-                HintSprite.sprite = captchaSprite[3];
-                defineAnswer("guyrys","irystocrat");
-                break;
-            case 4:
-                HintSprite.sprite = captchaSprite[4];
-                defineAnswer("irys","irys");
-                break;
-            case 5:
-                HintSprite.sprite = captchaSprite[5];
-                defineAnswer("jailbird","jailbirds");
-                break;
-            case 6 :
-                HintSprite.sprite = captchaSprite[6];
-                defineAnswer("kfp","kfps");
-                break;
-            case 7:
-                HintSprite.sprite = captchaSprite[7];
-                defineAnswer("mococo","mococo abyssgard");
-                break;
-            case 8:
-                HintSprite.sprite = captchaSprite[8];
-                defineAnswer("otomo","otomos");
-                break;                
-            default:
-                break;
-        }
-    }
-    public void checkValue()
-    {
-        if(PlayerAnswer.text.ToUpper() == trueAnswer.ToUpper() || PlayerAnswer.text.ToUpper() == trueAnswer2.ToUpper())
-        {
-            Debug.Log("Corrext!!!");
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.captchaCorrect);
-            currentButton.OnPurchaseSuccess();
-            changeCaptchaSprite();
-            DisplayCaptcha(false,null);
-        }
-        else
-        {
-            Debug.Log("Incorrect!!!");
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.captchaWrong);
-            changeCaptchaSprite();
-            DisplayCaptcha(false,null);
-        }
-        PlayerAnswer.text = null;
-    }
-    void defineAnswer(String x,String y)
-    {
-        trueAnswer = x;
-        trueAnswer2 = y;
-    }
+
     void spawnBlock()
     {
         GameObject[] block =new GameObject[items];
@@ -148,22 +75,14 @@ public class GameManager : MonoBehaviour
             int y = spawnSpacing * (1-i/3);
             block[i] = Instantiate(btnPrefab, spawnTransform);
             block[i].transform.localPosition = new Vector3(x,y,0);
-            ButtonManager btnSetup = block[i].GetComponent<ButtonManager>();
+            ProductItemManager btnSetup = block[i].GetComponent<ProductItemManager>();
             btnSetup.SetIndex(i);
             btnObjects.Add(btnSetup);
         }
     }
     public void ShowEndScreen()
     {
-        string oldItems = PlayerPrefs.GetString("SavedItems", "");
-        string itemsString = "";
-        for(int i = 0; i < CurrentIndex; i++)
-        {
-            itemsString += inventoryID[i] + ",";
-        }
-        string newItems = oldItems + itemsString;
-        PlayerPrefs.SetString("SavedItems", newItems);
-        PlayerPrefs.Save();
+        DM.GameDataSave();
 
         string result = "Result: " + CurrentIndex +"/"+ items + "\n";
         for(int i = 0; i < 3; i++)
@@ -238,14 +157,6 @@ public class GameManager : MonoBehaviour
         inventorySlotR0.text = inventoryIndex[0].ToString();
         inventorySlotR1.text = inventoryIndex[1].ToString();
         inventorySlotR2.text = inventoryIndex[2].ToString();
-    }
-    public void DisplayCaptcha(bool x, ButtonManager y)
-    {
-        captcha.SetActive(x);
-        if(x)
-            PlayerAnswer.ActivateInputField();
-        if(y != null)
-            currentButton = y;
     }
     public void GoToMenu()
     {

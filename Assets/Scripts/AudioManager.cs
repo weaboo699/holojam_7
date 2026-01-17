@@ -33,7 +33,6 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        // 應用音量設定
         bgmSource.volume = bgmVolume;
     }
     

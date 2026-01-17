@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class ButtonManager : MonoBehaviour
+public class ProductItemManager : MonoBehaviour
 {
     [SerializeField]private int startTime;
     [SerializeField]private SpriteRenderer spr;
@@ -17,6 +17,8 @@ public class ButtonManager : MonoBehaviour
     [SerializeField]private TMP_Text timeText;
     [SerializeField]private int timeScale = 1;
 
+    private int GameStartTime = 12; //遊戲開始時 時鐘的時間會是12:00
+    private int GameEndTime = 18; //時鐘的時間到18:00(6:00pm)時 遊戲結束
     private int index;
     private int ItemID;
     private int rare;
@@ -24,7 +26,6 @@ public class ButtonManager : MonoBehaviour
     private float endSec;
     private bool limitTimeSet = false;
     private bool alreadyCounted = false;
-    public int zzz;
 
     private bool isActive;
     private bool blockChecked = false;
@@ -34,7 +35,7 @@ public class ButtonManager : MonoBehaviour
     {
         isActive = false;
         rare = UnityEngine.Random.Range(0,3);
-        startTime = UnityEngine.Random.Range(12,18);
+        startTime = UnityEngine.Random.Range(GameStartTime,GameEndTime);
         ItemID = UnityEngine.Random.Range(0,20);
         changeSprite();
         timeText.text = "start at \n"+ startTime + ":00";
@@ -44,20 +45,19 @@ public class ButtonManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        zzz = ClockControler.CurrentHour;
         checkStartTime();
         if(isActive)
             checkLimitTime();
     }
     void checkStartTime()
     {
-        if(ClockControler.CurrentHour == startTime && !blockChecked)
+        if(ClockManager.CurrentHour == startTime && !blockChecked)
         {
             isActive = true;
             changeSprite();
             setLimitTime();
             blockChecked = true;
-            timeText.text = "time remain \n" + (int)((endSec - ClockControler.CurrentSec)/60);
+            timeText.text = "time remain \n" + (int)((endSec - ClockManager.CurrentSec)/60);
         }
     }
     void changeSprite()
@@ -89,17 +89,17 @@ public class ButtonManager : MonoBehaviour
     {
         if(limitTimeSet)
             return;
-        startSec = ClockControler.CurrentSec;
+        startSec = ClockManager.CurrentSec;
         switch (rare)
         {
             case 0:
-                endSec = startSec + (600f * timeScale);
+                endSec = startSec + (600f * timeScale); //稀有度最低 搶購時間遊戲內60秒
                 break;
             case 1:
-                endSec = startSec + (400f * timeScale);
+                endSec = startSec + (400f * timeScale); //稀有度中等 搶購時間遊戲內40秒
                 break;
             case 2:
-                endSec = startSec + (200f * timeScale);
+                endSec = startSec + (200f * timeScale); //稀有度最高 搶購時間遊戲內20秒
                 break;
             default:
                 break;
@@ -108,7 +108,7 @@ public class ButtonManager : MonoBehaviour
     }
     void checkLimitTime()
     {
-        if(ClockControler.CurrentSec >= endSec && !alreadyCounted)
+        if(ClockManager.CurrentSec >= endSec && !alreadyCounted)
         {
             alreadyCounted = true;
             isActive = false;
@@ -119,7 +119,7 @@ public class ButtonManager : MonoBehaviour
         }
         else
         {
-            int remainMin = (int)((endSec - ClockControler.CurrentSec) / 60);
+            int remainMin = (int)((endSec - ClockManager.CurrentSec) / 60);
             timeText.text = "time remain \n" + remainMin;
         }
 
@@ -160,7 +160,7 @@ public class ButtonManager : MonoBehaviour
         {
             AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
             Debug.Log("Start Captcha");
-            GameManager.Instance.DisplayCaptcha(true,this);
+            CaptchaManager.Instance.DisplayCaptcha(true,this);
         }
             
     }
