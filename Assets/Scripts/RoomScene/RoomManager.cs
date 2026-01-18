@@ -35,7 +35,8 @@ public class RoomManager : MonoBehaviour
 
     void Start()
     {
-        string slotsString = PlayerPrefs.GetString("SavedSlots","");
+        RoomSaveData roomData = DataManager.Instance.LoadRoomData();
+        GameSaveData gameData = DataManager.Instance.LoadGameData();
 
         
         displaySlots = new int[slotAmount];
@@ -45,23 +46,22 @@ public class RoomManager : MonoBehaviour
         }
         spawnSlots();
 
-        if (!string.IsNullOrEmpty(slotsString))
+        itemsID = gameData.inventoryIDs;
+        if (roomData.displayedSlots.Count > 0)
         {
-            string[] ID = slotsString.Split(',');
-            for(int i = 0; i < ID.Length - 1; i++)
+            for(int i = 0; i < roomData.displayedSlots.Count; i++)
             {
-                int itemID = Int32.Parse(ID[i]);
-                displaySlots[i] = itemID;
+                displaySlots[i] = roomData.displayedSlots[i];
                 
-                if(itemID > 0)
+                if(itemsID[i] > 0)
                 {
-                    slotObjects[i].SetID(itemID);
-                    if(itemID /100 == 1)
-                        slotObjects[i].SetImage(DisplayImage[itemID%100]);
-                    else if(itemID / 100 == 2)
-                        slotObjects[i].SetImage(DisplayImageR1[itemID%100]);
+                    slotObjects[i].SetID(itemsID[i]);
+                    if(itemsID[i] /100 == 1)
+                        slotObjects[i].SetImage(DisplayImage[itemsID[i]%100]);
+                    else if(itemsID[i] / 100 == 2)
+                        slotObjects[i].SetImage(DisplayImageR1[itemsID[i]%100]);
                     else
-                        slotObjects[i].SetImage(DisplayImageR2[itemID%100]);
+                        slotObjects[i].SetImage(DisplayImageR2[itemsID[i]%100]);
                 }
             }
         }
@@ -70,10 +70,6 @@ public class RoomManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
     void InitializeItemList()
     {
         string itemsString = PlayerPrefs.GetString("SavedItems", "");
@@ -128,22 +124,9 @@ public class RoomManager : MonoBehaviour
     }
     public void GoToMainMenu()
     {
-        string itemsString = "";
-        for(int i = 0; i < itemsID.Count; i++)
-        {
-            itemsString += itemsID[i] + ",";
-        }
-        PlayerPrefs.SetString("SavedItems", itemsString);
-        PlayerPrefs.Save();
-
-        string slotsString = "";
-        for(int i = 0; i < slotAmount; i++)
-        {
-            slotsString += slotObjects[i].GetID() + ",";
-        }
-        PlayerPrefs.SetString("SavedSlots", slotsString);
-        PlayerPrefs.Save();
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
+        DataManager.Instance.SaveGameData(itemsID.ToArray(), itemsID.Count);
+        DataManager.Instance.SaveRoomData(displaySlots);
+        
         SceneManager.LoadScene("MainMenu");
     }
     public void SelectItem(int index)

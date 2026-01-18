@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     }
     public void ShowEndScreen()
     {
-        DM.GameDataSave();
+        DataManager.Instance.SaveGameData(inventoryID, CurrentIndex);
 
         string result = "Result: " + CurrentIndex +"/"+ items + "\n";
         for(int i = 0; i < 3; i++)

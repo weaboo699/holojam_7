@@ -3,8 +3,8 @@ using TMPro;
 using System;
 public class ClockManager : MonoBehaviour
 {
-    static public int CurrentHour;
-    static public float CurrentSec;
+    public int CurrentHour;
+    public float CurrentSec;
     private float totalTime;
 
     [SerializeField]private TMP_Text currentTime;
@@ -12,7 +12,12 @@ public class ClockManager : MonoBehaviour
     private float TimeInADay = 86400f;
     [SerializeField] private int timeScale = 1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public static ClockManager Instance {get;set;}
 
+    void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         totalTime = startTime * 3600f;

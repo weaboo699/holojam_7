@@ -51,13 +51,13 @@ public class ProductItemManager : MonoBehaviour
     }
     void checkStartTime()
     {
-        if(ClockManager.CurrentHour == startTime && !blockChecked)
+        if(ClockManager.Instance.CurrentHour == startTime && !blockChecked)
         {
             isActive = true;
             changeSprite();
             setLimitTime();
             blockChecked = true;
-            timeText.text = "time remain \n" + (int)((endSec - ClockManager.CurrentSec)/60);
+            timeText.text = "time remain \n" + (int)((endSec - ClockManager.Instance.CurrentSec)/60);
         }
     }
     void changeSprite()
@@ -89,7 +89,7 @@ public class ProductItemManager : MonoBehaviour
     {
         if(limitTimeSet)
             return;
-        startSec = ClockManager.CurrentSec;
+        startSec = ClockManager.Instance.CurrentSec;
         switch (rare)
         {
             case 0:
@@ -108,7 +108,7 @@ public class ProductItemManager : MonoBehaviour
     }
     void checkLimitTime()
     {
-        if(ClockManager.CurrentSec >= endSec && !alreadyCounted)
+        if(ClockManager.Instance.CurrentSec >= endSec && !alreadyCounted)
         {
             alreadyCounted = true;
             isActive = false;
@@ -119,7 +119,7 @@ public class ProductItemManager : MonoBehaviour
         }
         else
         {
-            int remainMin = (int)((endSec - ClockManager.CurrentSec) / 60);
+            int remainMin = (int)((endSec - ClockManager.Instance.CurrentSec) / 60);
             timeText.text = "time remain \n" + remainMin;
         }
 
