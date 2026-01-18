@@ -27,16 +27,17 @@ public class DataManager : MonoBehaviour
     
     public void SaveGameData(int[] inventoryIDs, int currentIndex)
     {
-        GameSaveData data = new GameSaveData();
+        // 載入舊資料
+        GameSaveData existingData = LoadGameData();
         
-        // 只存有效的物品
+        // 追加新物品
         for(int i = 0; i < currentIndex; i++)
         {
-            data.inventoryIDs.Add(inventoryIDs[i]);
+            existingData.inventoryIDs.Add(inventoryIDs[i]);
         }
-        data.currentIndex = currentIndex;
+        existingData.currentIndex = existingData.inventoryIDs.Count;
         
-        string json = JsonUtility.ToJson(data);
+        string json = JsonUtility.ToJson(existingData);
         PlayerPrefs.SetString(GAME_SAVE_KEY, json);
         PlayerPrefs.Save();
         
@@ -54,14 +55,25 @@ public class DataManager : MonoBehaviour
         return new GameSaveData();
     }
     
-    public void SaveRoomData(int[] slotIDs)
+    public void SaveRoomData(List<int> inventoryIDs, int[] displayedSlots)
     {
-        RoomSaveData data = new RoomSaveData();
-        data.displayedSlots = new List<int>(slotIDs);
+        // 保存完整的資料
+        GameSaveData gameData = new GameSaveData();
+        gameData.inventoryIDs = inventoryIDs;
+        gameData.currentIndex = inventoryIDs.Count;
         
-        string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString(ROOM_SAVE_KEY, json);
+        RoomSaveData roomData = new RoomSaveData();
+        roomData.displayedSlots = new List<int>(displayedSlots);
+        
+        string gameJson = JsonUtility.ToJson(gameData);
+        string roomJson = JsonUtility.ToJson(roomData);
+        
+        PlayerPrefs.SetString(GAME_SAVE_KEY, gameJson);
+        PlayerPrefs.SetString(ROOM_SAVE_KEY, roomJson);
         PlayerPrefs.Save();
+        
+        Debug.Log("Room data saved - Inventory: " + gameJson);
+        Debug.Log("Room data saved - Display: " + roomJson);
     }
     
     public RoomSaveData LoadRoomData()

@@ -38,57 +38,48 @@ public class RoomManager : MonoBehaviour
         RoomSaveData roomData = DataManager.Instance.LoadRoomData();
         GameSaveData gameData = DataManager.Instance.LoadGameData();
 
-        
         displaySlots = new int[slotAmount];
         for(int i = 0; i < slotAmount; i++)
         {
             displaySlots[i] = -1;
         }
+        
         spawnSlots();
 
-        itemsID = gameData.inventoryIDs;
+        itemsID = new List<int>(gameData.inventoryIDs);
+        
         if (roomData.displayedSlots.Count > 0)
         {
-            for(int i = 0; i < roomData.displayedSlots.Count; i++)
+            int displayCount = Mathf.Min(roomData.displayedSlots.Count, slotAmount);
+            
+            for(int i = 0; i < displayCount; i++)
             {
-                displaySlots[i] = roomData.displayedSlots[i];
+                int itemID = roomData.displayedSlots[i];
+                displaySlots[i] = itemID;
                 
-                if(itemsID[i] > 0)
+                if(itemID > 0)
                 {
-                    slotObjects[i].SetID(itemsID[i]);
-                    if(itemsID[i] /100 == 1)
-                        slotObjects[i].SetImage(DisplayImage[itemsID[i]%100]);
-                    else if(itemsID[i] / 100 == 2)
-                        slotObjects[i].SetImage(DisplayImageR1[itemsID[i]%100]);
-                    else
-                        slotObjects[i].SetImage(DisplayImageR2[itemsID[i]%100]);
+                    slotObjects[i].SetID(itemID);
+                    
+                    int rarity = itemID / 100;
+                    int spriteIndex = itemID % 100;
+                    
+                    if(rarity == 1)
+                        slotObjects[i].SetImage(DisplayImage[spriteIndex]);
+                    else if(rarity == 2)
+                        slotObjects[i].SetImage(DisplayImageR1[spriteIndex]);
+                    else if(rarity == 3)
+                        slotObjects[i].SetImage(DisplayImageR2[spriteIndex]);
+                    
+                    itemsID.Remove(itemID);
                 }
             }
         }
-
-        InitializeItemList();
+        
+        spawnItems();
     }
 
     // Update is called once per frame
-    void InitializeItemList()
-    {
-        string itemsString = PlayerPrefs.GetString("SavedItems", "");
-
-        if (string.IsNullOrEmpty(itemsString))
-        {
-            itemsID = new List<int>(0); 
-            return;
-        }
-
-        string[] ID = itemsString.Split(',');
-        itemsID = new List<int>(ID.Length - 1);
-        for(int i = 0; i < ID.Length - 1; i++)
-        {
-            itemsID.Add(Int32.Parse(ID[i]));
-            Debug.Log(itemsID[i]);
-        }
-        spawnItems();        
-    }
     void spawnSlots()
     {
         for(int i = 0; i < slotAmount; i++)
@@ -124,9 +115,9 @@ public class RoomManager : MonoBehaviour
     }
     public void GoToMainMenu()
     {
-        DataManager.Instance.SaveGameData(itemsID.ToArray(), itemsID.Count);
-        DataManager.Instance.SaveRoomData(displaySlots);
+        DataManager.Instance.SaveRoomData(itemsID, displaySlots);
         
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
         SceneManager.LoadScene("MainMenu");
     }
     public void SelectItem(int index)
